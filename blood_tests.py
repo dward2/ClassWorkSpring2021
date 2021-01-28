@@ -12,9 +12,11 @@ def interface():
         
 def HDL_driver():
     # Get Data
-    # Analyze HDL
-    # Output results
-    pass
+    HDL = get_HDL_input()
+    
+def get_HDL_input():
+    HDL = input("Enter HDL Level: ")
+    return int(HDL)
 
 interface()
 

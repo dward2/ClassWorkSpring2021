@@ -29,7 +29,7 @@ def analyze_HDL(HDL):
 
 def output_HDL(HDL, analysis):
     print("The HDL entered was {}".format(HDL))
-    print("The level is {}".format(analysis))
+    print("The HDL level is {}".format(analysis))
     
 interface()
 

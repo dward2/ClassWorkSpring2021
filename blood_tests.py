@@ -14,12 +14,12 @@ def interface():
             LDL_driver()
         
 def HDL_driver():
-    HDL = get_HDL_input()
+    HDL = get_generic_input("HDL")
     analysis = analyze_HDL(HDL)
     output_HDL(HDL, analysis)
     
-def get_HDL_input():
-    HDL = input("Enter HDL Level: ")
+def get_generic_input(test_name):
+    HDL = input("Enter {} result: ".format(test_name))
     return int(HDL)
     
 def analyze_HDL(HDL):
@@ -35,6 +35,7 @@ def output_HDL(HDL, analysis):
     print("The HDL level is {}".format(analysis))
     
 def LDL_driver():
+    LDL = get_generic_input("LDL")
     pass
     
 interface()

@@ -16,7 +16,7 @@ def interface():
 def HDL_driver():
     HDL = get_generic_input("HDL")
     analysis = analyze_HDL(HDL)
-    output_HDL(HDL, analysis)
+    output_generic("HDL", HDL, analysis)
     
 def get_generic_input(test_name):
     HDL = input("Enter {} result: ".format(test_name))
@@ -30,14 +30,14 @@ def analyze_HDL(HDL):
     else:
         return "Low"
 
-def output_HDL(HDL, analysis):
-    print("The HDL entered was {}".format(HDL))
-    print("The HDL level is {}".format(analysis))
+def output_generic(test_name, test_value, analysis):
+    print("The {} entered was {}".format(test_name, test_value))
+    print("This value is {}".format(analysis))
     
 def LDL_driver():
     LDL = get_generic_input("LDL")
     analysis = analyze_LDL(LDL)
-    pass
+    output_generic("LDL", LDL, analysis)
 
 def analyze_LDL(LDL):
     if LDL >= 190:

@@ -1,11 +1,15 @@
 # Health Database
 
 ## Introduction
-This program will be a database that contains health information on patients.
+This repository contains a variety of programs to manage patient health information.
 
-Here is more information.
 
-## Specifications
+## Modules
+### `blood_tests.py`
+This module allows for the entry and analysis of LDL, HDL, and Total cholesterol.
+
+
+## Specifications for future database
 There are the specifications.
 * Information
   + Name

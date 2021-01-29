@@ -52,8 +52,18 @@ def analyze_LDL(LDL):
     else:
         return "Normal"
 
+def analyze_total_cholesterol(total):
+    if total < 200:
+        return "Normal"
+    elif 200 <= total < 240:
+        return "Borderline high"
+    else:
+        return "High"
+
 def total_driver():
-    pass
+    total_chol = get_generic_input("Total cholesterol")
+    analysis = analyze_total_cholesterol(total_chol)
+    output_generic("Total cholesterol", total_chol, analysis)
 
     
 interface()

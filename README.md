@@ -13,7 +13,9 @@ This module allows for the entry and analysis of LDL, HDL, and Total cholesterol
 There are the specifications.
 * Information
   + Name
-  + Date of Birth
+  + ID No
+  + Age
+  + Tests
 * Test Database
 * Other
 

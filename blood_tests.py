@@ -65,6 +65,7 @@ def total_driver():
     analysis = analyze_total_cholesterol(total_chol)
     output_generic("Total cholesterol", total_chol, analysis)
 
-    
-interface()
+
+if __name__ == "__main__":    
+    interface()
 

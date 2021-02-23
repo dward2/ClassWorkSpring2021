@@ -3,6 +3,9 @@
 
 def sqrt(n): 
 
+    if n < 0:
+        raise ValueError("A negative number ({})was sent to sqrt".
+        format(n))
     # We are using n itself as 
     # initial approximation This 
     # can definitely be improved  

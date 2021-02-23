@@ -1,5 +1,13 @@
-a = "The sky is blue"
-print(a)
+def calc_square_root(n):
+    
+    from calculator import sqrt
 
-for letter in a
-    print(letxter)
+    answer = sqrt(n)
+    return answer
+    
+def main():
+    print(calc_square_root(-2))
+    
+    
+if __name__ == "__main__":
+    main()

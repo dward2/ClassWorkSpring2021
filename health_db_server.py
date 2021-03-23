@@ -118,6 +118,35 @@ def add_patient_test_data(in_data):
     patient["test"].append((in_data["test_name"], in_data["test_result"]))
 
 
+@app.route("/get_results/<patient_id>", methods=["GET"])
+def get_results(patient_id):
+    validation_info, server_status = \
+        validate_variable_url_patient_id(patient_id)
+    if server_status != 200:
+        return validation_info, server_status
+    patient_info = get_patient_from_db(validation_info)
+    return jsonify(patient_info), 200
+
+
+def validate_variable_url_patient_id(patient_id):
+    try:
+        id_int = int(patient_id)
+    except ValueError:
+        return "{} is not a valid patient id".format(patient_id), 400
+    valid_patient_id = validate_patient_id(id_int)
+    if valid_patient_id is False:
+        return "Patient id {} does not exist in database".format(id_int), 400
+    return id_int, 200
+
+
+def get_patient_from_db(patient_id):
+    for patient in db:
+        if patient["id"] == patient_id:
+            break
+    return patient
+
+
+
 if __name__ == '__main__':
     init_server()
     app.run()

@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename="server.log", level=logging.INFO)
 
 app = Flask(__name__)
 

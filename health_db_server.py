@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 db = list()
 
+
 def init_server():
     add_patient_to_db("Ann Ables", 101, "A+")
     add_patient_to_db("Bob Boyles", 102, "B-")
@@ -22,6 +23,7 @@ def add_patient_to_db(name, id, blood_type):
     #print(db)
     logging.info(new_patient)
     return True
+
 
 @app.route("/new_patient", methods=["POST"])
 def post_new_patient():
@@ -54,7 +56,7 @@ def validate_new_patient_info(in_dict):
 
 
 def process_new_patient(in_data):
-    validate_input, server_status  = validate_new_patient_info(in_data)
+    validate_input, server_status = validate_new_patient_info(in_data)
     if validate_input is not True:
         return validate_input, server_status
     valid_blood_type = validate_blood_type(in_data)
@@ -65,11 +67,13 @@ def process_new_patient(in_data):
     add_patient_to_db(in_data["name"],
                       in_data["id"],
                       in_data["blood_type"])
-    return "Patient succesfully added", 200
+    return "Patient successfully added", 200
+
 
 @app.route("/get_image", methods=["GET"])
 def get_image_route():
     return db, 200
+
 
 if __name__ == '__main__':
     init_server()

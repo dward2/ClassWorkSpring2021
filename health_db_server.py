@@ -72,7 +72,50 @@ def process_new_patient(in_data):
 
 @app.route("/get_image", methods=["GET"])
 def get_image_route():
-    return db, 200
+    return jsonify(db), 200
+
+
+@app.route("/add_test", methods=["POST"])
+def post_add_test():
+    in_data = request.get_json()
+    result, server_status = process_add_test(in_data)
+    return result, server_status
+
+
+def process_add_test(in_data):
+    validate_input, server_status = validate_add_test_info(in_data)
+    if validate_input is not True:
+        return validate_input, server_status
+    valid_patient_id = validate_patient_id(in_data["id"])
+    if valid_patient_id is not True:
+        return "Patient id {} does not exist".format(in_data["id"]), 400
+    add_patient_test_data(in_data)
+    return "Test data successfully added", 200
+
+
+def validate_add_test_info(in_dict):
+    expected_keys = ("id", "test_name", "test_result")
+    expected_types = (int, str, int)
+    for key, ty in zip(expected_keys, expected_types):
+        if key not in in_dict.keys():
+            return "{} key not found".format(key), 400
+        if type(in_dict[key]) != ty:
+            return "{} key has the wrong value type".format(key), 400
+    return True, 200
+
+
+def validate_patient_id(patient_id):
+    for patient in db:
+        if patient["id"] == patient_id:
+            return True
+    return False
+
+
+def add_patient_test_data(in_data):
+    for patient in db:
+        if patient["id"] == in_data["id"]:
+            break
+    patient["test"].append((in_data["test_name"], in_data["test_result"]))
 
 
 if __name__ == '__main__':

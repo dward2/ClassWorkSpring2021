@@ -23,3 +23,15 @@ def test_get_patient_from_db():
     db.append(test_patient)
     answer = get_patient_from_db(200)
     assert answer == test_patient
+
+
+def test_get_patient_from_db_missing():
+    from health_db_server import get_patient_from_db
+    from health_db_server import db
+    test_patient = {"name": "Erica Emerson",
+                    "id": 201,
+                    "blood_type": "O-",
+                    "test": []}
+    db.append(test_patient)
+    answer = get_patient_from_db(200)
+    assert answer is False

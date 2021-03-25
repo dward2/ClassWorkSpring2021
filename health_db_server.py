@@ -142,8 +142,8 @@ def validate_variable_url_patient_id(patient_id):
 def get_patient_from_db(patient_id):
     for patient in db:
         if patient["id"] == patient_id:
-            break
-    return patient
+            return patient
+    return False
 
 
 

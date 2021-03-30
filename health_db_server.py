@@ -1,13 +1,12 @@
 from flask import Flask, request, jsonify
 import logging
 from pymodm import connect
+from pymodm import errors as pymodm_errors
 from patient_class import Patient
 
 logging.basicConfig(filename="server.log", level=logging.INFO)
 
 app = Flask(__name__)
-
-
 
 
 def init_server():
@@ -89,7 +88,7 @@ def process_add_test(in_data):
     if validate_input is not True:
         return validate_input, server_status
     valid_patient_id = validate_patient_id(in_data["id"])
-    if valid_patient_id is not True:
+    if valid_patient_id is False:
         return "Patient id {} does not exist".format(in_data["id"]), 400
     add_patient_test_data(in_data)
     return "Test data successfully added", 200
@@ -107,18 +106,22 @@ def validate_add_test_info(in_dict):
 
 
 def validate_patient_id(patient_id):
-    # for patient in db:
-    #     if patient["id"] == patient_id:
-    #         return True
-    return False
+    try:
+        db_item = Patient.objects.raw({"_id": patient_id}).first()
+    except pymodm_errors.DoesNotExist:
+        return False
+    return True
 
 
 def add_patient_test_data(in_data):
-    # for patient in db:
-    #     if patient["id"] == in_data["id"]:
-    #         break
-    # patient["test"].append((in_data["test_name"], in_data["test_result"]))
-    pass
+    try:
+        db_item = Patient.objects.raw({"_id": in_data["id"]}).first()
+    except pymodm_errors.DoesNotExist:
+        return False
+    new_test = (in_data["test_name"], in_data["test_result"])
+    db_item.test.append(new_test)
+    updated_patient = db_item.save()
+    return updated_patient
 
 
 @app.route("/get_results/<patient_id>", methods=["GET"])

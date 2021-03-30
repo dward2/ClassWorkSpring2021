@@ -13,6 +13,22 @@ def test_add_patient_to_db():
     assert answer.id_no == id
 
 
+def test_add_patient_test_data():
+    from health_db_server import add_patient_test_data
+    from health_db_server import add_patient_to_db
+    name = "David Ward"
+    id = 100
+    blood_type = "O+"
+    added_patient = add_patient_to_db(name, id, blood_type)
+    out_data = {"id": 8,
+                "test_name": "LDL",
+                "test_result": 100}
+    answer = add_patient_test_data(out_data)
+    expected = ("LDL", 100)
+    assert answer.test[-1] == expected
+
+
+
 # def test_get_patient_from_db():
 #     from health_db_server import get_patient_from_db
 #     from health_db_server import db

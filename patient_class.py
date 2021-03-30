@@ -7,3 +7,8 @@ class Patient(MongoModel):
     blood_type = fields.CharField()
     test = fields.ListField()
 
+    def print_name(self):
+        print("My name is {}".format(self.name))
+
+
+

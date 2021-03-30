@@ -1,28 +1,30 @@
 from flask import Flask, request, jsonify
 import logging
+from pymodm import connect
+from patient_class import Patient
 
 logging.basicConfig(filename="server.log", level=logging.INFO)
 
 app = Flask(__name__)
 
-db = list()
+
 
 
 def init_server():
-    add_patient_to_db("Ann Ables", 101, "A+")
-    add_patient_to_db("Bob Boyles", 102, "B-")
+    print("Connecting to MongoDB...")
+    connect("mongodb+srv://spring2021:OAqFeWjqw0FWZucD@"
+            "bme547.ba348.mongodb.net/health_db?retryWrites=true&w=majority")
+    print("Connected.")
 
 
-def add_patient_to_db(name, id, blood_type):
-    new_patient = {"name": name,
-                   "id": id,
-                   "blood_type": blood_type,
-                   "test": list()}
-
-    db.append(new_patient)
-    #print(db)
-    logging.info(new_patient)
-    return True
+def add_patient_to_db(name_in, id, blood_type):
+    new_patient = Patient(name=name_in,
+                          id_no=id,
+                          blood_type=blood_type)
+    saved_patient = new_patient.save()
+    logging.info("Added new patient id {} to database"
+                 .format(saved_patient.id_no))
+    return saved_patient
 
 
 @app.route("/new_patient", methods=["POST"])
@@ -70,9 +72,9 @@ def process_new_patient(in_data):
     return "Patient successfully added", 200
 
 
-@app.route("/get_image", methods=["GET"])
-def get_image_route():
-    return jsonify(db), 200
+# @app.route("/get_image", methods=["GET"])
+# def get_image_route():
+#     return jsonify(db), 200
 
 
 @app.route("/add_test", methods=["POST"])
@@ -105,17 +107,18 @@ def validate_add_test_info(in_dict):
 
 
 def validate_patient_id(patient_id):
-    for patient in db:
-        if patient["id"] == patient_id:
-            return True
+    # for patient in db:
+    #     if patient["id"] == patient_id:
+    #         return True
     return False
 
 
 def add_patient_test_data(in_data):
-    for patient in db:
-        if patient["id"] == in_data["id"]:
-            break
-    patient["test"].append((in_data["test_name"], in_data["test_result"]))
+    # for patient in db:
+    #     if patient["id"] == in_data["id"]:
+    #         break
+    # patient["test"].append((in_data["test_name"], in_data["test_result"]))
+    pass
 
 
 @app.route("/get_results/<patient_id>", methods=["GET"])
@@ -140,9 +143,9 @@ def validate_variable_url_patient_id(patient_id):
 
 
 def get_patient_from_db(patient_id):
-    for patient in db:
-        if patient["id"] == patient_id:
-            return patient
+    # for patient in db:
+    #     if patient["id"] == patient_id:
+    #         return patient
     return False
 
 

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Blood Donor Database</title>
+</head>
+
+<body>
+<form method="post">
+<div style="display: inline-grid;
+           grid-template-columns: auto auto auto;
+           grid-column-gap: 20px;
+           grid-row-gap: 10px">
+  <div style="grid-column-start: 1;
+              grid-column-end: 3">
+    Blood Donor Database
+  </div>
+  <div>
+    <label for="donation_center">Donation Center</label>
+  </div>
+  <div>
+    <label for="name">Name:</label>
+  </div>
+  <div>
+    <input type="text" id="name" name="name">
+  </div>
+  <div>
+    <select id="donation_center" name="donation_center">
+      <option value="Raleigh">Raleigh</option>
+      <option value="Cary">Cary</option>
+      <option value="Durham">Durham</option>
+    </select>
+  </div>
+  <div>
+    <label for="patient_id">Id:</label>
+  </div>
+  <div style="grid-column-start: 2;
+              grid-column-end: 4">
+    <input type="text" id="patient_id" name="patient_id">
+  </div>
+  <div>
+    <input type="radio" id="A_type" name="Blood_Letter"
+         value="A">
+    <label for="A_type">A</label>
+  </div>
+  <div></div>
+  <div></div>
+  <div>
+    <input type="radio" id="B_type" name="Blood_Letter"
+         value="B">
+  <label for="B_type">B</label>
+  </div>
+  <div>
+    <input type="checkbox" id="rh_positive" name="rh_positive"
+         value="+">
+    <label for="rh_positive">Rh Positive</label>
+  </div>
+  <div></div>
+  <div>
+    <input type="radio" id="AB_type" name="Blood_Letter"
+         value="AB">
+  <label for="AB_type">AB</label>
+  </div>
+  <div></div>
+  <div></div>
+  <div>
+    <input type="radio" id="O_type" name="Blood_Letter"
+         value="O">
+  <label for="O_type">O</label>
+  </div>
+  <div></div>
+  <div></div>
+  <div>
+    <input type="submit" value="Ok">
+  </div>
+  <div>
+    <input type="submit" value="Cancel">
+  </div>
+</div>
+</form>
+
+
+</body>
+
+</html>

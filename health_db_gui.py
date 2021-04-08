@@ -1,6 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-import requests
+from tkinter import filedialog, simpledialog, messagebox
+from health_db_client import make_post_request_to_add_patient
+
+
+from PIL import Image, ImageTk
 
 
 def design_window():
@@ -11,14 +15,26 @@ def design_window():
         return
 
     def ok_command():
-        p_id = patient_id.get()
+        # Get Data From GUI
         p_name = donor_name.get()
-        p_blood_letter = blood_letter.get()
+        p_id = patient_id.get()
+        p_blood = blood_letter.get()
         p_rh = rh_factor.get()
-        answer = make_new_patient_post_request(p_name, p_id, p_blood_letter,
-                                               p_rh)
-        status.configure(text=answer)
+        # Call an outside function to do the work on that data
+        result = make_post_request_to_add_patient(p_name, p_id, p_blood, p_rh)
+        # Modify GUI in response to function result
+        status.configure(text=result)
         return
+
+    def change_picture_cmd():
+        filename = filedialog.askopenfilename(initialdir="C:/")
+        if filename == "":
+            return
+        pil_image = Image.open(filename)
+        tk_image = ImageTk.PhotoImage(pil_image)
+        image_label.configure(image=tk_image)
+        image_label.image = tk_image
+        messagebox.showinfo("My Program", "Picture changed")
 
     root = tk.Tk()
     root.title("Blood Donor Database")
@@ -70,20 +86,22 @@ def design_window():
     status = ttk.Label(root, text="Status")
     status.grid(column=2, row=4)
 
+    pil_image = Image.open("acl1.jpg")
+    image_size = pil_image.size
+    adj_factor = 1
+    new_width = round(image_size[0] * adj_factor)
+    new_height = round(image_size[1] * adj_factor)
+    new_size_image = pil_image.resize((new_width, new_height))
+    tk_image = ImageTk.PhotoImage(new_size_image)
+    image_label = ttk.Label(root, image=tk_image)
+    image_label.image = tk_image
+    image_label.grid(column=1, row=7)
+
+    change_picture_btn = ttk.Button(root, text="Change Picture",
+                                    command=change_picture_cmd)
+    change_picture_btn.grid(column=2, row=7)
+
     root.mainloop()
-
-
-def make_new_patient_post_request(patient_name, patient_id, blood_letter,
-                                  rh_factor):
-    patient_id = int(patient_id)
-    patient = {"name": patient_name,
-               "id": patient_id,
-               "blood_type": "{}{}".format(blood_letter, rh_factor)}
-
-    r = requests.post("http://127.0.0.1:5000/new_patient", json=patient)
-    print(r.status_code)
-    print(r.text)
-    return r.text
 
 
 if __name__ == "__main__":

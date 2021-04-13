@@ -71,11 +71,6 @@ def process_new_patient(in_data):
     return "Patient successfully added", 200
 
 
-# @app.route("/get_image", methods=["GET"])
-# def get_image_route():
-#     return jsonify(db), 200
-
-
 @app.route("/add_test", methods=["POST"])
 def post_add_test():
     in_data = request.get_json()
@@ -130,7 +125,11 @@ def get_results(patient_id):
         validate_variable_url_patient_id(patient_id)
     if server_status != 200:
         return validation_info, server_status
-    patient_info = get_patient_from_db(validation_info)
+    patient = get_patient_from_db(validation_info)
+    patient_info = {"name": patient.name,
+                    "id": patient.id_no,
+                    "blood_type": patient.blood_type,
+                    "tests": patient.test}
     return jsonify(patient_info), 200
 
 
@@ -146,10 +145,11 @@ def validate_variable_url_patient_id(patient_id):
 
 
 def get_patient_from_db(patient_id):
-    # for patient in db:
-    #     if patient["id"] == patient_id:
-    #         return patient
-    return False
+    try:
+        db_item = Patient.objects.raw({"_id": patient_id}).first()
+    except pymodm_errors.DoesNotExist:
+        return False
+    return db_item
 
 
 

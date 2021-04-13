@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog, simpledialog, messagebox
 from health_db_client import make_post_request_to_add_patient
+from image_handler import send_image_to_server
 
 
 from PIL import Image, ImageTk
@@ -34,6 +35,7 @@ def design_window():
         tk_image = ImageTk.PhotoImage(pil_image)
         image_label.configure(image=tk_image)
         image_label.image = tk_image
+        send_image_to_server(filename)
         messagebox.showinfo("My Program", "Picture changed")
 
     root = tk.Tk()

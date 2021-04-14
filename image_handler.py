@@ -16,13 +16,13 @@ def encode_image_to_b64_string(filename):
 
 def send_b64_string_to_server(b64_string):
     out_data = {"image": b64_string, "net_id": "daw742", "id_no": 1}
-    r = requests.post("http://vcm-6764.vm.duke.edu/add_image", json=out_data)
+    r = requests.post("http://127.0.0.1:5000/add_image", json=out_data)
     print(r.status_code)
     print(r.text)
 
 
 def get_watermark_image():
-    r = requests.get("http://vcm-6764.vm.duke.edu/get_image/daw742/1")
+    r = requests.get("http://127.0.0.1:5000/get_image/daw742/1")
     if r.status_code != 200:
         print(r.text)
         return "There was an error"

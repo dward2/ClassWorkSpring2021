@@ -3,6 +3,9 @@ import logging
 from pymodm import connect
 from pymodm import errors as pymodm_errors
 from patient_class import Patient
+# ***** Added for Image Handling Routes *****
+from image_record_class import ImageRecord
+
 
 logging.basicConfig(filename="server.log", level=logging.INFO)
 
@@ -151,6 +154,92 @@ def get_patient_from_db(patient_id):
         return False
     return db_item
 
+
+"""
+************* Image Handling Routes ***************
+"""
+
+
+@app.route("/add_image", methods=["POST"])
+def add_image():
+    in_data = request.get_json()
+    result, status = process_add_image(in_data)
+    return result, status
+
+
+def process_add_image(in_data):
+    validate_message, status = validate_input(in_data,
+                                              ["image", "net_id", "id_no"],
+                                              [str, str, int])
+    if status != 200:
+        return validate_message, status
+    if get_image_from_database(in_data) is not False:
+        return "Image id {} already exists for net_id {}"\
+                   .format(in_data["id_no"], in_data["net_id"]), 400
+    reply = add_image_to_database(in_data)
+    try:
+        return_string = "Image successfully added as id_no {}"\
+            .format(reply.id_no)
+    except AttributeError:
+        return "Problem with save to database", 400
+    return return_string, 200
+
+
+def validate_input(in_data, keys, types):
+    for key, in_type in zip(keys, types):
+        if key not in in_data:
+            return "Missing key {} in post".format(key), 400
+        if type(in_data[key]) is not in_type:
+            return "Key {} is of incorrect type".format(key), 400
+    return True, 200
+
+
+def get_image_from_database(in_data):
+    try:
+        record = ImageRecord.objects.raw({"$and":
+                                          [{"net_id": in_data["net_id"]},
+                                           {"id_no": in_data["id_no"]}
+                                           ]
+                                          }).first()
+    except pymodm_errors.DoesNotExist:
+        return False
+    return record
+
+
+def add_image_to_database(in_data):
+    record = ImageRecord(net_id=in_data["net_id"],
+                         id_no=in_data["id_no"],
+                         image=in_data["image"])
+    reply = record.save()
+    return reply
+
+
+@app.route("/get_image/<net_id>/<id_no>", methods=["GET"])
+def get_image(net_id, id_no):
+    b64_string, status = process_get_image(net_id, id_no)
+    return b64_string, status
+
+
+def process_get_image(net_id, id_no):
+    validate_result, status = validate_id_no(id_no)
+    if status == 200:
+        id_no = validate_result
+    else:
+        return validate_result, status
+    search_data = {"net_id": net_id, "id_no": id_no}
+    image_record = get_image_from_database(search_data)
+    if image_record is False:
+        return "No image with id {} found for net id {}"\
+                   .format(id_no, net_id), 400
+    return image_record.image, 200
+
+
+def validate_id_no(id_no):
+    try:
+        id_int = int(id_no)
+    except ValueError:
+        return "id_no given is not a valid integer", 400
+    return id_int, 200
 
 
 if __name__ == '__main__':
